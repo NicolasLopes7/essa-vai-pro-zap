@@ -16,7 +16,6 @@ export default async (url: string) => {
     const postRequestUrl = url.split("/?")[0];
     try {
         const {data: {items}} = await axios.default.get<PostResponse>(`https://instagram-post-proxy.herokuapp.com/?postUrl=${postRequestUrl}`)
-        console.log(items)
         const item = items[0];
         return {
             dataUrl: item.url,

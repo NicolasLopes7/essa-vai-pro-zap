@@ -1,7 +1,7 @@
 import * as Permissions from "expo-permissions";
 import * as FileSystem from "expo-file-system";
 
-export default async (url: string, extension: string, callback: (downloadProgress: any) => {}) => {
+export default async (url: string, extension: string, callback: (downloadProgress: any) => void) => {
     let cameraPermissions = await Permissions.getAsync(Permissions.CAMERA_ROLL)
     if(cameraPermissions.status !== "granted") {
         cameraPermissions = await Permissions.askAsync(Permissions.CAMERA_ROLL)
