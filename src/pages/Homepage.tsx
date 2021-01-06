@@ -1,11 +1,10 @@
 import { Text, SafeAreaView , TouchableOpacity, Image, TextInput, CameraRoll  } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from "../styles/Global"
 import { downloadInstagramPost, getInstagramPostInfo } from "../services/index"
 
-export default function Homepage() {
+export default function Homepage({ navigation }) {
     const INSTAGRAM_LOGO_URI = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/768px-Instagram_logo_2016.svg.png"
-    
     const [downloadProgress, setDownloadProgress] = useState("")
     const [previewUrl, setPreviewUrl] = useState("")
     const [url, setUrl] = useState("")
@@ -14,6 +13,19 @@ export default function Homepage() {
     const [extension, setExtension] = useState("")
     const [status, setStatus] = useState("");
 
+    useEffect(() => {
+      navigation.addListener("blur", (e) => {
+        setDownloadProgress("")
+        setPreviewUrl("")
+        setUrl("")
+        setPostUrl("")
+        setPostPath("")
+        setExtension("")
+        setStatus("")
+      })
+    },[navigation])
+
+    
     function handleDownloadProgress(downloadProgress: any) {
         const progress = 100 * (downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite);
         setDownloadProgress(progress.toFixed(2))
@@ -30,6 +42,11 @@ export default function Homepage() {
     
           const uri = await downloadInstagramPost(dataUrl, dataExtension, handleDownloadProgress)
           if(uri) setPostPath(uri)
+          navigation.navigate("Share", {
+            previewUrl: dataPreview,
+            postPath: uri,
+            extension: dataExtension
+          })
         } catch (error) {
           console.error(error)
           setStatus("Falha ao se conectar com o servidor")

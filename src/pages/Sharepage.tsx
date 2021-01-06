@@ -1,10 +1,11 @@
 import { Text, SafeAreaView , TouchableOpacity, Image } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import styles from "../styles/Global";
 import * as Sharing from "expo-sharing"
 
 export default function Homepage({ route, navigation }) {
     const { previewUrl, postPath, extension } = route.params;
+
 
     async function openShareDialog() {
         if(!(await Sharing.isAvailableAsync())) {
